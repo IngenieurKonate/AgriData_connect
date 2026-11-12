@@ -1,0 +1,22 @@
+import { useState } from 'react';
+import { Badge, Button, Dialog, PageHeading, SelectField, TextAreaField } from '../../components/ui';
+import type { ModerationView } from '../../services/contracts';
+import { apiRequest } from '../../services/apiClient';
+import { useAction, useApi } from '../../services/useApi';
+import { date, Feedback } from '../purchase/shared';
+
+const labels: Record<string, string> = { active: 'Actif', suspended: 'Suspendu', published: 'Publiée', disabled: 'Désactivée', open: 'Ouverte', ordered: 'Commandée', closed: 'Fermée', buyer: 'Acheteur', farmer: 'Agriculteur', admin: 'Administration' };
+interface Target { id: string; title: string; type: 'user' | 'offer' | 'request'; status: string }
+export function ModerationPage() {
+  const result = useApi<ModerationView>('admin/moderation');
+  const [kind, setKind] = useState('user');
+  const [target, setTarget] = useState<Target | null>(null);
+  const [reason, setReason] = useState('');
+  const [notice, setNotice] = useState('');
+  const action = useAction();
+  const data = result.data;
+  const rows = kind === 'user' ? data?.users.map(item => ({ id: item.id, title: item.displayName, detail: `${labels[item.role]} · ${item.city}`, type: 'user' as const, status: item.status, protected: item.role === 'admin' })) : kind === 'offer' ? data?.offers.map(item => ({ id: item.id, title: item.title, detail: `${data.users.find(user => user.id === item.sellerId)?.displayName} · ${item.city}`, type: 'offer' as const, status: item.status, protected: false })) : data?.requests.map(item => ({ id: item.id, title: `${item.quantityKg} kg de ${item.product === 'tomato' ? 'tomates' : 'oignons'}`, detail: `${data.users.find(user => user.id === item.buyerId)?.displayName} · ${item.destination}`, type: 'request' as const, status: item.status, protected: false }));
+  return <><PageHeading eyebrow="Administration" title="Utilisateurs et annonces" description="Suspendez ou réactivez un compte ou une annonce avec un motif conservé dans l’historique." /><SelectField id="moderation-kind" label="Éléments à consulter" value={kind} onChange={event => setKind(event.target.value)}><option value="user">Comptes</option><option value="offer">Offres</option><option value="request">Demandes</option></SelectField>{notice && <p className="notice" role="status">{notice}</p>}<Feedback {...result} retry={result.reload}><div className="record-list">{rows?.map(item => <article className="panel moderation-row" key={item.id}><div><h2>{item.title}</h2><p>{item.detail}</p><Badge>{labels[item.status]}</Badge></div>{!item.protected && <Button onClick={() => { setTarget(item); setReason(''); }}>{item.status === 'suspended' ? 'Réactiver' : 'Suspendre'}</Button>}</article>)}</div><section className="panel purchase-panel"><h2>Historique de modération</h2>{!data?.events.length && <p>Aucune intervention enregistrée.</p>}<ol className="activity-list">{data?.events.slice().reverse().map(item => <li key={item.id}><strong>{data.users.find(user => user.id === item.targetId)?.displayName ?? data.offers.find(offer => offer.id === item.targetId)?.title ?? 'Demande d’achat'}</strong><p>{labels[item.previousStatus]} → {labels[item.nextStatus]} · {item.reason}</p><time dateTime={item.createdAt}>{date(item.createdAt)}</time></li>)}</ol></section></Feedback>
+    <Dialog open={Boolean(target)} title={target?.status === 'suspended' ? 'Réactiver cet élément' : 'Suspendre cet élément'} onClose={() => { if (!action.pending) setTarget(null); }}><p>{target?.title}</p><p>Les commandes existantes restent consultables et peuvent poursuivre leur traitement.</p><form onSubmit={event => { event.preventDefault(); void action.run(async () => { if (!target) return; const status = target.status === 'suspended' ? target.type === 'user' ? 'active' : target.type === 'offer' ? 'published' : 'open' : 'suspended'; await apiRequest(target.type === 'user' ? `admin/users/${target.id}/status` : `admin/announcements/${target.type}/${target.id}/status`, { method: 'PATCH', body: JSON.stringify({ status, reason }) }); setTarget(null); setNotice('Le statut a été mis à jour et le motif enregistré.'); result.reload(); }); }}><fieldset disabled={action.pending}><TextAreaField id="moderation-reason" label="Motif de l’intervention" maxLength={500} required rows={3} value={reason} onChange={event => setReason(event.target.value)} /><Feedback error={action.error} /><Button variant="primary" type="submit">Confirmer le changement de statut</Button></fieldset></form></Dialog>
+  </>;
+}

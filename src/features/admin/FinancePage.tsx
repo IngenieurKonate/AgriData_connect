@@ -1,0 +1,19 @@
+import { Link } from 'react-router-dom';
+import { Badge, Button, PageHeading } from '../../components/ui';
+import type { FinanceView, PayoutView } from '../../services/contracts';
+import { api } from '../../services/apiClient';
+import { useAction, useApi } from '../../services/useApi';
+import { date, Feedback, labels, money } from '../purchase/shared';
+
+export function FinancePage({ admin = false }: { admin?: boolean }) {
+  const result = useApi<FinanceView | PayoutView[]>(admin ? 'admin/payments' : 'payouts');
+  const action = useAction();
+  const finance = result.data && !Array.isArray(result.data) ? result.data : null;
+  const payouts = Array.isArray(result.data) ? result.data : finance?.payouts;
+  return <><PageHeading eyebrow="Suivi financier" title={admin ? 'Paiements et versements' : 'Mes règlements'} description="Retrouvez les encaissements, remboursements et sommes dues aux producteurs." /><Feedback {...result} retry={result.reload}><Feedback error={action.error} />
+    {finance && <><section className="stat-grid" aria-label="Synthèse financière">{[['Encaissements des commandes', finance.totals.paidCents], ['Remboursements exécutés', finance.totals.refundedCents], ['Commissions après remboursements', finance.totals.commissionCents], ['Transport conservé', finance.totals.retainedDeliveryCents], ['Versé aux producteurs', finance.totals.paidToSellerCents], ['Reste dû aux producteurs', finance.totals.remainingToSellerCents]].map(([label, value]) => <div className="panel stat-card" key={label}><span>{label}</span><strong>{money(Number(value))}</strong></div>)}</section><p className="muted">Les encaissements incluent les ventes des producteurs et le transport. Ils ne représentent pas les recettes de la plateforme. Les commissions indiquées sont nettes des remboursements exécutés.</p>
+      <section className="panel purchase-panel"><h2>Encaissements et tentatives</h2><ul className="activity-list">{finance.attempts.slice().reverse().map(attempt => <li key={attempt.id}><Link className="text-link" to={`/commandes/${attempt.orderId}`}>{attempt.reference}</Link><p>{attempt.method === 'cash_plus' ? 'Cash Plus' : 'Carte Naps'} · {attempt.status === 'invalidated' ? 'Invalidée' : labels[attempt.status]} · {money(attempt.amountCents)}</p><time dateTime={attempt.createdAt}>{date(attempt.createdAt)}</time>{attempt.status === 'pending' && <Button disabled={action.pending} onClick={() => void action.run(async () => { await api.paymentResult(attempt.id, 'success'); result.reload(); })}>Confirmer l’encaissement</Button>}</li>)}</ul>{!finance.attempts.length && <p>Aucun encaissement enregistré.</p>}</section>
+      <section className="panel purchase-panel"><h2>Remboursements exécutés</h2>{finance.refunds.length ? <ul className="activity-list">{finance.refunds.map(refund => <li key={refund.id}><Link className="text-link" to={`/commandes/${refund.orderId}`}>{refund.reference}</Link><p>{money(refund.amountCents)} remboursés</p><time dateTime={refund.executedAt}>{date(refund.executedAt)}</time></li>)}</ul> : <p>Aucun remboursement exécuté.</p>}</section></>}
+    <section className="panel purchase-panel"><h2>Versements aux agriculteurs</h2>{payouts?.length ? <ul className="activity-list">{payouts.map(item => <li key={item.id}><Link className="text-link" to={`/commandes/${item.orderId}`}>{item.orderReference}</Link><p>Net agriculteur : <strong>{money(item.netCents)}</strong> · Commission : {money(item.commissionCents)}</p><Badge>{item.status === 'blocked' ? item.blockReason : item.status === 'paid' ? 'Versé' : labels[item.status]}</Badge>{item.reference && <p>{item.reference}</p>}{item.paidAt && <time dateTime={item.paidAt}>{date(item.paidAt)}</time>}{admin && item.status === 'ready' && <p><Link className="text-link" to={`/commandes/${item.orderId}`}>Ouvrir la commande pour effectuer le versement</Link></p>}</li>)}</ul> : <p>Aucun règlement à afficher.</p>}</section>
+  </Feedback></>;
+}

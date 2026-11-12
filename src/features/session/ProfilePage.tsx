@@ -1,0 +1,16 @@
+import { useEffect, useState } from 'react';
+import { ActionLink, Button, Field, PageHeading, SelectField, TextAreaField } from '../../components/ui';
+import { roleLabels } from '../../app/profiles';
+import { apiRequest } from '../../services/apiClient';
+import { useAction, useApi } from '../../services/useApi';
+import type { UserRecord } from '../../domain/types';
+import { Feedback } from '../purchase/shared';
+
+export function ProfilePage() {
+  const result = useApi<UserRecord>('me');
+  const action = useAction();
+  const [saved, setSaved] = useState(false);
+  const [form, setForm] = useState({ displayName: '', organization: '', phone: '', city: '', address: '', description: '', buyerType: 'professional' });
+  useEffect(() => { if (result.data) { const user = result.data; setForm({ displayName: user.displayName, organization: user.organization ?? '', phone: user.phone, city: user.city, address: user.address, description: user.description ?? '', buyerType: user.buyerType ?? 'professional' }); } }, [result.data]);
+  return <><PageHeading eyebrow="Votre espace personnel" title="Mon profil" description="Vos coordonnées de collecte ou de livraison. Les commandes déjà créées conservent leur adresse d’origine." action={<ActionLink to="/connexion">Changer de profil</ActionLink>} /><Feedback {...result} retry={result.reload}>{result.data && <form className="panel purchase-panel" onSubmit={e => { e.preventDefault(); void action.run(async () => { await apiRequest('me', { method: 'PATCH', body: JSON.stringify({ displayName: form.displayName, organization: form.organization, phone: form.phone, city: form.city, address: form.address, ...(result.data!.role === 'farmer' ? { description: form.description } : result.data!.role === 'buyer' ? { buyerType: form.buyerType } : {}) }) }); setSaved(true); }); }}><fieldset disabled={action.pending}><div className="form-grid">{(['displayName', 'organization', 'phone', 'city', 'address'] as const).map(key => <Field key={key} id={`profile-${key}`} label={{ displayName: 'Nom affiché', organization: 'Organisation', phone: 'Téléphone', city: 'Ville', address: 'Adresse' }[key]} value={form[key]} type={key === 'phone' ? 'tel' : 'text'} maxLength={200} required={['displayName', 'city', 'address'].includes(key)} onChange={e => { setSaved(false); setForm({ ...form, [key]: e.target.value }); }} />)}<Field id="profile-role" label="Rôle" value={roleLabels[result.data.role]} readOnly /><Field id="profile-email" label="Adresse e-mail" value={result.data.email} readOnly /></div>{result.data.role === 'farmer' && <TextAreaField id="profile-description" label="Présentation de l’exploitation" maxLength={200} rows={3} value={form.description} onChange={e => { setSaved(false); setForm({ ...form, description: e.target.value }); }} />}{result.data.role === 'buyer' && <SelectField id="profile-buyer-type" label="Type d’acheteur" value={form.buyerType} onChange={e => { setSaved(false); setForm({ ...form, buyerType: e.target.value }); }}><option value="professional">Professionnel</option><option value="private">Particulier</option></SelectField>}<Button variant="primary" type="submit">Enregistrer les coordonnées</Button></fieldset>{saved && <p role="status" className="notice">Vos coordonnées ont été enregistrées.</p>}<Feedback error={action.error} /></form>}</Feedback></>;
+}

@@ -1,0 +1,39 @@
+{
+  "name": "agridata-connect",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0 <21 || >=22.12.0"
+  },
+  "packageManager": "npm@10.8.2",
+  "scripts": {
+    "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1 --configLoader native",
+    "build": "node node_modules/typescript/bin/tsc --noEmit && node node_modules/vite/bin/vite.js build --configLoader native",
+    "preview": "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --configLoader native",
+    "test": "node tests/foundations.test.mjs && node node_modules/vitest/vitest.mjs run --configLoader runner --pool=threads",
+    "test:e2e": "node node_modules/@playwright/test/cli.js test",
+    "test:ui": "node node_modules/@playwright/test/cli.js test --ui"
+  },
+  "dependencies": {
+    "lucide-react": "1.7.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-router-dom": "7.18.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
+    "msw": "^2.15.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.7",
+    "vitest": "^4.1.12"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+@font-face { font-family: 'Hepta Slab'; src: url('/fonts/HeptaSlab.ttf') format('truetype'); font-weight: 1 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Readex Pro'; src: url('/fonts/ReadexPro.ttf') format('truetype'); font-weight: 160 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Martian Mono'; src: url('/fonts/MartianMono.ttf') format('truetype'); font-weight: 100 800; font-style: normal; font-display: swap; }
+:root {
+  --ad-cedre: #143a2c;
+  --ad-safran: #f2b630;
+  --ad-tomate: #e04f2a;
+  --ad-semoule: #f6f1e5;
+  --ad-menthe: #dcead2;
+  --ad-oignon: #7e3f64;
+  --ad-encre: #0f1f18;
+  --text-muted: #68715f;
+  --border: #dedfce;
+  --sidebar-width: 244px;
+  /* Font files and OFL licenses are hosted locally in public/fonts. */
+  --font-heading: 'Hepta Slab', Georgia, serif;
+  --font-body: 'Readex Pro', 'Segoe UI', sans-serif;
+  --font-mono: 'Martian Mono', Consolas, monospace;
+}
