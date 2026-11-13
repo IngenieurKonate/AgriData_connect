@@ -37,7 +37,8 @@ p { margin-bottom: 16px; }
 .skip-link { position: fixed; z-index: 20; top: -100px; left: 20px; background: white; padding: 12px 20px; }
 .skip-link:focus { top: 12px; }
 .sidebar { position: fixed; inset: 0 auto 0 0; width: var(--sidebar-width); padding: 35px 20px 20px; background: var(--ad-cedre); color: #f1f1df; display: flex; flex-direction: column; z-index: 5; }
-.wordmark { display: block; font-family: var(--font-heading); font-size: 27px; font-weight: 600; letter-spacing: -.06em; line-height: 1.12; padding: 0 12px; width: fit-content; color: inherit; }
+.wordmark { display: flex; align-items: center; width: 100%; max-width: 204px; height: 52px; padding: 0; color: inherit; }
+.brand-logo { display: block; width: 100%; max-width: 100%; height: auto; position: static; }
 .wordmark > span { display: block; font-family: var(--font-body); text-transform: uppercase; font-size: 13px; font-weight: 500; letter-spacing: .26em; padding-top: 8px; }
 .brand-dot { color: #b7cba3; }
 .sidebar-label { color: #a9bdae; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; margin: 45px 12px 14px; }
