@@ -68,7 +68,7 @@ test('signalement avec preuve, commentaires des parties, décision puis rembours
   expect(errors).toEqual([]);
 });
 
-test('accord partiel : 150 MAD remboursés, 662,40 MAD versés et clôture', async ({ page }) => {
+test('accord partiel : 150 MAD remboursés, 669,30 MAD versés et clôture', async ({ page }) => {
   await choose(page, 'Administration'); await page.goto('/admin/litiges/dispute-delivery');
   await decision(page, 'partial_refund', async () => {
     await page.getByLabel('Remboursement produits (MAD)').fill('100');
@@ -78,8 +78,8 @@ test('accord partiel : 150 MAD remboursés, 662,40 MAD versés et clôture', asy
   await expect(page.getByText('Les montants se réconcilient.')).toBeVisible();
   await expect(page.getByText('Cette commande est clôturée.')).toHaveCount(0);
   const reconciliation = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Réconciliation financière' }) });
-  await expect(reconciliation).toContainText('662,40 MAD');
-  await expect(reconciliation).toContainText('27,60 MAD');
+  await expect(reconciliation).toContainText('669,30 MAD');
+  await expect(reconciliation).toContainText('20,70 MAD');
   await expect(reconciliation).toContainText('150,00 MAD');
   await page.getByRole('button', { name: 'Effectuer le versement' }).click();
   await expect(page.getByText('Cette commande est clôturée.')).toBeVisible();
@@ -87,7 +87,7 @@ test('accord partiel : 150 MAD remboursés, 662,40 MAD versés et clôture', asy
   await expect(page.getByText('150,00 MAD remboursés')).toBeVisible();
   const data = await snapshot(page);
   expect(data.payouts.filter((p: { orderId: string }) => p.orderId === 'order-disputed')).toHaveLength(1);
-  expect(data.payouts.find((p: { orderId: string }) => p.orderId === 'order-disputed').netCents).toBe(66240);
+  expect(data.payouts.find((p: { orderId: string }) => p.orderId === 'order-disputed').netCents).toBe(66930);
 });
 
 for (const problem of [false, true]) {

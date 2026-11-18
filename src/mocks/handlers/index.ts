@@ -117,7 +117,7 @@ export function createHandlers(repository: DemoRepository, options: { latencyMs?
       if (mine) {
         const user = requireUser(request);
         if (!user) return failure(401, 'UNAUTHENTICATED', 'Choisissez un profil pour continuer.');
-        if (user.role !== 'farmer') return failure(403, 'FORBIDDEN', 'Cet espace est réservé aux agriculteurs.');
+        if (user.role !== 'farmer') return failure(403, 'FORBIDDEN', 'Cet espace est réservé aux producteurs.');
         offers = offers.filter(offer => offer.sellerId === user.id);
       } else offers = offers.filter(offer => offer.status === 'published' && offer.stockRemainingKg > 0 && load().data?.users.find(user => user.id === offer.sellerId)?.status === 'active');
       const q = url.searchParams.get('q')?.trim().toLocaleLowerCase('fr') ?? '';
@@ -201,7 +201,7 @@ export function createHandlers(repository: DemoRepository, options: { latencyMs?
     http.get('*/api/payouts', ({ request }) => {
       const user = requireUser(request);
       if (!user) return failure(401, 'UNAUTHENTICATED', 'Choisissez un profil pour continuer.');
-      if (user.role !== 'farmer' && user.role !== 'admin') return failure(403, 'FORBIDDEN', 'Cet espace est réservé aux agriculteurs.');
+      if (user.role !== 'farmer' && user.role !== 'admin') return failure(403, 'FORBIDDEN', 'Cet espace est réservé aux producteurs.');
       return HttpResponse.json({ data: payoutViews(load().data!).filter(item => user.role === 'admin' || item.sellerId === user.id) });
     }),
     http.get('*/api/admin/dashboard', ({ request }) => {

@@ -5,7 +5,7 @@ import { apiRequest } from '../../services/apiClient';
 import { useAction, useApi } from '../../services/useApi';
 import { date, Feedback } from '../purchase/shared';
 
-const labels: Record<string, string> = { active: 'Actif', suspended: 'Suspendu', published: 'Publiée', disabled: 'Désactivée', open: 'Ouverte', ordered: 'Commandée', closed: 'Fermée', buyer: 'Acheteur', farmer: 'Agriculteur', admin: 'Administration' };
+const labels: Record<string, string> = { active: 'Actif', suspended: 'Suspendu', published: 'Publiée', disabled: 'Désactivée', open: 'Ouverte', ordered: 'Commandée', closed: 'Fermée', buyer: 'Acheteur', farmer: 'Producteur', admin: 'Administration' };
 interface Target { id: string; title: string; type: 'user' | 'offer' | 'request'; status: string }
 export function ModerationPage() {
   const result = useApi<ModerationView>('admin/moderation');

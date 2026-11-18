@@ -4,8 +4,8 @@
 
 | Métadonnée | Valeur |
 | --- | --- |
-| Version | 1.0 |
-| Date | 7 novembre 2026 |
+| Version | 1.1 |
+| Date de mise à jour | 18 novembre 2026 |
 | Responsable technique | Bachirou |
 | Usage | Référence pour développer et valider le prototype universitaire |
 | Plateforme | Site web, laptop first, adapté au mobile |
@@ -16,6 +16,15 @@
 Ce document décrit exclusivement le prototype à réaliser. Les parcours, écrans, calculs et changements d'état doivent fonctionner dans le navigateur. Ils ne constituent ni un système de paiement réel ni une infrastructure commerciale opérationnelle.
 
 Les choix explicitement validés par l'équipe sont identifiés comme tels. Les conventions de démonstration ci-dessous complètent les détails nécessaires à l'implémentation ; elles ne fixent pas la politique commerciale de la future entreprise.
+
+### État actualisé du prototype
+
+- Le rôle vendeur est désigné par « Producteur » dans l'interface.
+- La devise de marque est « Vos ventes agricoles, suivies jusqu'à la livraison. »
+- La commission de démonstration est de **3 %** sur la valeur des produits retenue après remboursement éventuel. Les commandes et versements locaux hérités de la configuration à 4 % sont migrés au chargement.
+- La Ferme Amane et ses offres de démonstration sont localisées à **Tanger**.
+- Le prototype reste autonome : les paiements, notifications, transport et versements sont simulés, et les données métier sont stockées dans le navigateur.
+- Les routes existantes `/agriculteur/...` sont conservées comme chemins techniques ; le libellé présenté aux utilisateurs est « Producteur ».
 
 ## Sommaire
 
@@ -39,11 +48,11 @@ Les choix explicitement validés par l'équipe sont identifiés comme tels. Les 
 
 ### 1.1. Ce que le prototype doit démontrer
 
-AgriData Connect permet à un agriculteur de vendre un lot et à un acheteur de commander des produits agricoles en gros. Les utilisateurs peuvent publier une offre ou une demande, échanger et négocier. La plateforme coordonne le transport après le paiement et suit la commande jusqu'au versement à l'agriculteur ou à la résolution d'un litige.
+AgriData Connect permet à un producteur de vendre un lot et à un acheteur de commander des produits agricoles en gros. Les utilisateurs peuvent publier une offre ou une demande, échanger et négocier. La plateforme coordonne le transport après le paiement et suit la commande jusqu'au versement à l'producteur ou à la résolution d'un litige.
 
 La démonstration doit rendre visibles cinq capacités :
 
-- Mettre en relation les agriculteurs et les acheteurs.
+- Mettre en relation les producteurs et les acheteurs.
 - Acheter directement au prix affiché ou négocier le prix et la quantité.
 - Créer une commande et simuler son règlement par carte ou en agence.
 - Suivre la collecte et la livraison depuis les espaces des deux parties.
@@ -66,7 +75,7 @@ La démonstration doit rendre visibles cinq capacités :
 | --- | --- |
 | Accès | Profils de démonstration, changement de rôle, déconnexion simulée, modification du profil |
 | Offres | Catalogue, recherche et filtres, détail, publication, modification, désactivation |
-| Demandes | Publication d'un besoin acheteur, consultation par les agriculteurs, proposition commerciale |
+| Demandes | Publication d'un besoin acheteur, consultation par les producteurs, proposition commerciale |
 | Échanges | Conversations, messages locaux, propositions structurées, acceptation ou refus |
 | Commandes | Achat direct ou négocié, contrôle de quantité, récapitulatif, création, liste et détail |
 | Paiements | Naps simulé, Cash Plus simulé, réussite, échec, attente et nouvelle tentative |
@@ -79,7 +88,7 @@ La démonstration doit rendre visibles cinq capacités :
 
 ### 2.2. P1 : compléments après validation des parcours P0
 
-- Inscription locale d'un compte acheteur ou agriculteur et récupération de mot de passe simulée.
+- Inscription locale d'un compte acheteur ou producteur et récupération de mot de passe simulée.
 - Comparateur dédié de deux ou trois offres de même produit et unité.
 - Graphique d'évolution des prix à partir d'un historique fictif explicitement sourcé.
 - Import d'images personnelles, au-delà de la bibliothèque d'images de démonstration.
@@ -97,7 +106,7 @@ La comparaison des prix par consultation du catalogue reste P0. Aucun écran P1 
 - Synchronisation entre appareils, messagerie temps réel réseau ou collaboration multi-onglets garantie.
 - Application mobile native, version arabe et gestion multilingue.
 - Gestion hors ligne avec file d'attente et synchronisation à la reconnexion.
-- Panier multi-agriculteurs, facturation fiscale, contrats et contrôle qualité réel.
+- Panier multi-producteurs, facturation fiscale, contrats et contrôle qualité réel.
 - Avis clients, abonnements commerciaux, recommandations IA et prévisions de marché.
 
 ## 3. Utilisateurs, accès et navigation
@@ -107,10 +116,10 @@ La comparaison des prix par consultation du catalogue reste P0. Aucun écran P1 
 | Rôle | Objectif | Actions autorisées |
 | --- | --- | --- |
 | Acheteur | Trouver et recevoir des produits en gros | Consulter les offres, publier ses demandes, discuter, accepter une proposition, commander, payer, confirmer la réception, signaler un problème |
-| Agriculteur | Vendre ses lots et suivre ses règlements | Publier ses offres, répondre aux demandes, négocier, voir ses commandes et leur livraison, consulter ses versements |
+| Producteur | Vendre ses lots et suivre ses règlements | Publier ses offres, répondre aux demandes, négocier, voir ses commandes et leur livraison, consulter ses versements |
 | Administrateur | Coordonner et finaliser les transactions | Consulter les commandes, organiser les transports, suivre les paiements, gérer les litiges, effectuer les versements, modérer les annonces |
 
-Les acheteurs peuvent être des professionnels ou des particuliers achetant en gros. Les coopératives utilisent le rôle agriculteur. Aucun utilisateur ne doit chercher ou réserver lui-même un transporteur.
+Les acheteurs peuvent être des professionnels ou des particuliers achetant en gros. Les coopératives utilisent le rôle producteur. Aucun utilisateur ne doit chercher ou réserver lui-même un transporteur.
 
 ### 3.2. Accès de démonstration
 
@@ -129,16 +138,16 @@ Les acheteurs peuvent être des professionnels ou des particuliers achetant en g
 | Espace | Navigation |
 | --- | --- |
 | Acheteur | Catalogue, Mes demandes, Messages, Mes commandes, Mon profil |
-| Agriculteur | Mes offres, Demandes d'achat, Messages, Commandes reçues, Mes règlements, Mon profil |
+| Producteur | Mes offres, Demandes d'achat, Messages, Commandes reçues, Mes règlements, Mon profil |
 | Administration | Tableau de bord, Commandes et livraisons, Paiements et versements, Litiges, Utilisateurs et annonces |
 
-La cloche de notifications et les outils de démonstration sont communs aux trois espaces. Les profils publics des agriculteurs peuvent être présentés dans un panneau depuis une offre, sans page supplémentaire obligatoire.
+La cloche de notifications et les outils de démonstration sont communs aux trois espaces. Les profils publics des producteurs peuvent être présentés dans un panneau depuis une offre, sans page supplémentaire obligatoire.
 
 ## 4. Parcours utilisateurs
 
 ### 4.1. Achat direct et réception conforme
 
-1. L'agriculteur publie une offre disponible.
+1. L'producteur publie une offre disponible.
 2. L'acheteur recherche le produit, consulte l'offre et choisit la quantité.
 3. Il vérifie le prix, l'adresse, les frais et l'estimation de livraison.
 4. Il confirme la commande ; le stock est réservé et la commande devient visible dans l'administration.
@@ -146,10 +155,10 @@ La cloche de notifications et les outils de démonstration sont communs aux troi
 6. L'administrateur planifie la collecte, puis enregistre la récupération et le départ en livraison.
 7. Il signale la remise des produits au destinataire.
 8. L'acheteur confirme une réception conforme.
-9. L'administrateur effectue le versement simulé à l'agriculteur.
+9. L'administrateur effectue le versement simulé à l'producteur.
 10. La commande est clôturée et reste consultable par les deux parties.
 
-L'achat direct n'exige aucune nouvelle acceptation de l'agriculteur. Le prix et la disponibilité publiés permettent de commander.
+L'achat direct n'exige aucune nouvelle acceptation de l'producteur. Le prix et la disponibilité publiés permettent de commander.
 
 ### 4.2. Négociation depuis une offre
 
@@ -163,12 +172,12 @@ L'achat direct n'exige aucune nouvelle acceptation de l'agriculteur. Le prix et 
 ### 4.3. Demande publiée par l'acheteur
 
 1. L'acheteur décrit son besoin et sa destination.
-2. Un agriculteur consulte la demande et propose un lot issu de ses offres.
+2. Un producteur consulte la demande et propose un lot issu de ses offres.
 3. Une conversation et une proposition structurée sont créées.
 4. L'acheteur accepte directement ou négocie.
-5. Une proposition acceptée conduit à une commande indépendante pour cet agriculteur.
+5. Une proposition acceptée conduit à une commande indépendante pour cet producteur.
 
-Plusieurs agriculteurs peuvent répondre à une demande. Pour simplifier le prototype, une demande P0 ne produit qu'une commande ; elle passe à « Commandée » à la création et les autres propositions deviennent indisponibles. Une nouvelle demande est créée pour un autre achat. Si cette commande est annulée avant paiement, la demande est rouverte ; les autres propositions restent à renouveler.
+Plusieurs producteurs peuvent répondre à une demande. Pour simplifier le prototype, une demande P0 ne produit qu'une commande ; elle passe à « Commandée » à la création et les autres propositions deviennent indisponibles. Une nouvelle demande est créée pour un autre achat. Si cette commande est annulée avant paiement, la demande est rouverte ; les autres propositions restent à renouveler.
 
 ### 4.4. Paiement en espèces via Cash Plus
 
@@ -197,7 +206,7 @@ La remise signalée reste en attente de confirmation de l'acheteur. L'administra
 ### F01. Profils et coordonnées
 
 - Modifier le nom affiché, le téléphone fictif, la ville et l'adresse.
-- Pour un agriculteur : nom d'exploitation ou de coopérative, lieu de collecte et courte description.
+- Pour un producteur : nom d'exploitation ou de coopérative, lieu de collecte et courte description.
 - Pour un acheteur : type professionnel ou particulier, organisation éventuelle et adresse de livraison.
 - Les coordonnées de collecte et de livraison sont obligatoires avant création d'une commande.
 - Les adresses sont du texte structuré, sans géocodage ni carte obligatoire.
@@ -205,7 +214,7 @@ La remise signalée reste en attente de confirmation de l'acheteur. L'administra
 
 ### F02. Catalogue et offres
 
-- Afficher des cartes avec photo, produit, calibre, origine, agriculteur, prix en MAD/kg, quantité disponible et minimum de commande.
+- Afficher des cartes avec photo, produit, calibre, origine, producteur, prix en MAD/kg, quantité disponible et minimum de commande.
 - Rechercher par produit ou titre ; filtrer par tomate/oignon, ville et disponibilité ; trier par prix ou publication récente.
 - Afficher un état vide et un bouton de remise à zéro des filtres.
 - Le détail expose aussi la description, le lieu de collecte, la disponibilité et les deux actions « Commander » et « Discuter ».
@@ -218,14 +227,14 @@ La remise signalée reste en attente de confirmation de l'acheteur. L'administra
 
 - Champs : produit, quantité souhaitée en kg, qualité/calibre souhaité, destination, date souhaitée et description ; prix souhaité facultatif.
 - L'acheteur peut créer, modifier ou fermer ses demandes ouvertes.
-- L'agriculteur peut consulter les demandes ouvertes et répondre avec une offre dont il est propriétaire.
+- L'producteur peut consulter les demandes ouvertes et répondre avec une offre dont il est propriétaire.
 - Une réponse doit correspondre au produit demandé. Le prototype n'autorise pas un changement implicite de produit.
-- La modification ou fermeture d'une demande invalide les propositions en attente ainsi que les propositions acceptées non encore utilisées, et notifie les agriculteurs concernés. La demande doit encore être ouverte pour créer une commande depuis une de ses propositions.
+- La modification ou fermeture d'une demande invalide les propositions en attente ainsi que les propositions acceptées non encore utilisées, et notifie les producteurs concernés. La demande doit encore être ouverte pour créer une commande depuis une de ses propositions.
 - Le bouton de réponse ouvre le formulaire de proposition, puis la conversation correspondante.
 
 ### F04. Messagerie et propositions
 
-- Une conversation relie un acheteur et un agriculteur à une offre ou une demande.
+- Une conversation relie un acheteur et un producteur à une offre ou une demande.
 - Les messages sont datés, attribués à leur auteur et visibles dans les deux espaces.
 - Pas de réponse automatique prétendant provenir d'un utilisateur réel : le présentateur change de profil pour répondre.
 - Une proposition contient un lot, une quantité et un prix unitaire. Les conditions de qualité convenues sont conservées dans un champ texte.
@@ -238,7 +247,7 @@ La remise signalée reste en attente de confirmation de l'acheteur. L'administra
 
 ### F05. Récapitulatif et commandes
 
-- Une commande contient un seul lot d'un seul agriculteur. Plusieurs achats donnent plusieurs commandes indépendantes.
+- Une commande contient un seul lot d'un seul producteur. Plusieurs achats donnent plusieurs commandes indépendantes.
 - Le récapitulatif montre produit, calibre, quantité, prix unitaire, montant des produits, frais de livraison et total.
 - Les commandes négociées utilisent exactement le prix et la quantité de la proposition acceptée.
 - Toute modification de quantité dans ce cas exige une nouvelle proposition ; l'achat direct reste libre dans les limites de l'offre.
@@ -264,7 +273,7 @@ Les tentatives ont leurs propres états : `pending`, `failed`, `succeeded` et `i
 - L'administrateur renseigne un transporteur partenaire fictif, une date de collecte et une estimation d'arrivée.
 - Le transporteur est une donnée de la mission ; il n'a pas de compte dans le prototype.
 - Les étapes sont successives : collecte planifiée, produits récupérés, en livraison, remise au destinataire signalée.
-- Chaque transition crée un événement daté et des notifications pour l'acheteur et l'agriculteur.
+- Chaque transition crée un événement daté et des notifications pour l'acheteur et l'producteur.
 - La même chronologie est affichée dans les trois espaces.
 - La remise signalée par l'administrateur est affichée « En attente de votre confirmation » pour l'acheteur.
 - Seul l'acheteur peut ensuite confirmer une réception conforme.
@@ -275,21 +284,21 @@ Les tentatives ont leurs propres états : `pending`, `failed`, `succeeded` et `i
 - Ouverture P0 autorisée à partir de « Remise signalée », avant confirmation conforme et avant versement.
 - Motifs disponibles : produit non conforme, quantité manquante, produit abîmé, autre.
 - Description obligatoire ; preuve facultative choisie dans une petite bibliothèque locale.
-- Un seul dossier actif par commande, avec commentaires de l'acheteur, de l'agriculteur et de l'administrateur.
+- Un seul dossier actif par commande, avec commentaires de l'acheteur, de l'producteur et de l'administrateur.
 - L'administration peut passer le dossier en traitement, enregistrer une décision, puis l'exécuter.
 - Choix de résolution : remboursement total, accord financier partiel ou remplacement.
 - La décision seule ne clôture pas le litige. Les conséquences décrites en section 7 doivent être exécutées.
-- L'acheteur et l'agriculteur voient la décision, les montants et l'historique.
+- L'acheteur et l'producteur voient la décision, les montants et l'historique.
 
 ### F09. Versements et administration financière
 
-- Afficher les montants encaissés simulés, commissions, frais de livraison et sommes dues aux agriculteurs.
+- Afficher les montants encaissés simulés, commissions, frais de livraison et sommes dues aux producteurs.
 - Le bouton « Effectuer le versement simulé » n'est accessible que si les conditions de règlement sont remplies.
 - Un versement est unique pour une commande et possède une référence fictive et une date.
 - Après le versement normal, la commande est clôturée automatiquement.
-- L'agriculteur voit un état « En attente de réception », « Bloqué : litige », « À verser », « Versé » ou « Non applicable », selon le cas.
+- L'producteur voit un état « En attente de réception », « Bloqué : litige », « À verser », « Versé » ou « Non applicable », selon le cas.
 - Les indicateurs de l'administration sont calculés depuis les données actuelles, pas écrits en dur.
-- Distinguer la valeur des transactions des recettes propres de la plateforme. Ne pas présenter les ventes des agriculteurs comme chiffre d'affaires de la plateforme.
+- Distinguer la valeur des transactions des recettes propres de la plateforme. Ne pas présenter les ventes des producteurs comme chiffre d'affaires de la plateforme.
 
 ### F10. Notifications et historique
 
@@ -328,7 +337,7 @@ Les chemins suivants forment le contrat de navigation. Un formulaire ou un panne
 | E10 | `/acheteur/commandes` | Liste des commandes de l'acheteur, filtres de statut |
 | E11 | `/commandes/:id` | Détail partagé avec actions adaptées au rôle : paiement, livraison, litige, règlement |
 | E12 | `/agriculteur/offres` | Liste et formulaires des offres du producteur |
-| E13 | `/demandes` et `/demandes/:id` | Besoins ouverts, détail et réponse de l'agriculteur |
+| E13 | `/demandes` et `/demandes/:id` | Besoins ouverts, détail et réponse de l'producteur |
 | E14 | `/agriculteur/commandes` | Commandes reçues, préparation et collecte à venir |
 | E15 | `/agriculteur/reglements` | Montants à recevoir et versements effectués |
 | E16 | `/admin` | Tableau de bord calculé : commandes, collectes, litiges, règlements |
@@ -360,14 +369,14 @@ Ces valeurs rendent les écrans testables. Elles sont fictives et ne remplacent 
 | Prix | Centimes de MAD par kg, strictement positif |
 | Quantité | Entier positif, supérieur ou égal au minimum du lot et inférieur ou égal au disponible |
 | Transport | `150 MAD + 0,25 MAD × quantité en kg` par commande |
-| Commission | 4 % du montant des produits retenu après éventuel remboursement ; retenue côté agriculteur |
+| Commission | 3 % du montant des produits retenu après éventuel remboursement ; retenue côté producteur |
 | Total acheteur | Montant des produits + transport, sans autre supplément |
 | Estimation initiale | Date fictive à J+2, clairement estimée ; ajustable par l'administrateur |
 | Fiscalité et frais PSP | Non modélisés dans les calculs P0 ; aucun montant ne doit être présenté comme une facture fiscale |
 
 La formule de transport ne dépend pas de la distance dans ce prototype. L'adresse demeure obligatoire pour illustrer la collecte et la livraison. Une mention discrète « Tarification de démonstration » accompagne le récapitulatif.
 
-Exemple de référence : 500 kg à 3,40 MAD/kg donnent 1 700 MAD de produits, 275 MAD de livraison et 1 975 MAD à payer. La commission fictive vaut 68 MAD et le versement agriculteur 1 632 MAD.
+Exemple de référence : 500 kg à 3,40 MAD/kg donnent 1 700 MAD de produits, 275 MAD de livraison et 1 975 MAD à payer. La commission fictive vaut 51 MAD et le versement producteur 1 649 MAD.
 
 Le récapitulatif et les calculs utilisent la même fonction. Arrondir la commission au centime, une seule fois sur le montant des produits concerné. L'administration et le vendeur voient la commission et le net ; l'acheteur voit ses propres frais sans ambiguïté.
 
@@ -434,9 +443,9 @@ Il n'existe pas d'action permettant de sauter la confirmation acheteur. Une tran
 - Une note consigne l'accord des parties ; le prototype ne comporte pas de signature juridique.
 - Exécuter le remboursement, puis calculer le reste produits `G = montantProduits - Rg`.
 - Cette exécution crée un objet `Refund`, passe le paiement à `partially_refunded` et le litige à `resolved`, avec une trace de la décision. Le dossier ne bloque alors plus le versement restant.
-- Commission = `arrondi(G × tauxCommission)` ; net agriculteur = `G - commission`.
+- Commission = `arrondi(G × tauxCommission)` ; net producteur = `G - commission`.
 - Si ce net est positif, le versement devient prêt et l'administration l'effectue avant clôture. Sinon il est non applicable et la clôture peut suivre la résolution.
-- Vérification financière : total payé moins remboursements = net agriculteur + commission recalculée + transport conservé.
+- Vérification financière : total payé moins remboursements = net producteur + commission recalculée + transport conservé.
 
 **Remplacement**
 
@@ -464,10 +473,11 @@ Il n'existe pas d'action permettant de sauter la confirmation acheteur. Une tran
 
 Prévoir une graine reproductible avec :
 
-- Deux agriculteurs fictifs, dont une coopérative.
+- Deux producteurs fictifs, dont une coopérative.
 - Deux acheteurs fictifs, un professionnel et un particulier achetant en gros.
 - Un administrateur.
 - Huit offres : tomates et oignons, plusieurs prix, calibres et villes, dont une offre épuisée et une désactivée.
+- La Ferme Amane et ses offres sont localisées à Tanger.
 - Trois demandes ouvertes permettant au moins deux réponses cohérentes.
 - Deux conversations, dont une proposition en attente.
 - Des commandes distinctes en attente de paiement, payée, en livraison, en attente de réception, clôturée et avec un litige ouvert.
@@ -699,7 +709,7 @@ public/
 | `POST /api/admin/disputes/:id/decision` | Enregistrer type et paramètres de résolution |
 | `POST /api/admin/disputes/:id/execute` | Exécuter remboursement ou démarrer remplacement |
 | `POST /api/admin/orders/:id/payout` | Effectuer le versement autorisé et clôturer |
-| `GET /api/payouts` | Versements de l'agriculteur actif, ou vue globale pour l'administration |
+| `GET /api/payouts` | Versements de l'producteur actif, ou vue globale pour l'administration |
 | `GET /api/notifications` ; `PATCH /api/notifications/:id` | Lire les notifications et les marquer comme lues |
 | `GET /api/admin/dashboard` | Indicateurs calculés |
 | `GET /api/admin/payments` ; `GET /api/admin/disputes` | Listes administratives |
@@ -727,7 +737,7 @@ Chaque scénario doit être vérifié sur le build de démonstration, pas unique
 
 | ID | Situation et action | Résultat attendu |
 | --- | --- | --- |
-| AC01 | Un agriculteur publie un lot valide puis le présentateur passe acheteur | Le lot apparaît dans le catalogue avec les mêmes données |
+| AC01 | Un producteur publie un lot valide puis le présentateur passe acheteur | Le lot apparaît dans le catalogue avec les mêmes données |
 | AC02 | Recherche et filtres incompatibles avec les offres | État vide explicite, filtres réinitialisables |
 | AC03 | Quantité sous le minimum ou au-delà du disponible | Confirmation bloquée, message clair, aucun changement de stock |
 | AC04 | Achat direct de 500 kg à 3,40 MAD/kg | Produits 1 700 MAD, livraison 275 MAD, total 1 975 MAD |
@@ -738,14 +748,14 @@ Chaque scénario doit être vérifié sur le build de démonstration, pas unique
 | AC09 | Tentative Cash Plus invalidée après changement de moyen | Sa confirmation est refusée ; pas de double encaissement |
 | AC10 | Annulation d'une commande non payée | Réservation libérée ; commande annulée visible dans l'historique |
 | AC11 | Proposition acceptée puis création de commande | Prix/quantité négociés conservés, stock revérifié, seconde création empêchée |
-| AC12 | Nouvelle demande et réponse d'un agriculteur | Conversation, proposition, acceptation et commande liées à la demande |
+| AC12 | Nouvelle demande et réponse d'un producteur | Conversation, proposition, acceptation et commande liées à la demande |
 | AC13 | Demande modifiée après réception de propositions | Propositions en attente invalidées et interlocuteurs notifiés |
-| AC14 | Administration avance collecte et livraison | Même frise datée chez acheteur et agriculteur, notifications persistantes |
+| AC14 | Administration avance collecte et livraison | Même frise datée chez acheteur et producteur, notifications persistantes |
 | AC15 | Administration signale la remise | Pas encore de réception conforme, pas de versement disponible |
-| AC16 | Acheteur confirme la réception puis administrateur verse | Net agriculteur 1 632 MAD dans l'exemple ; commande clôturée |
+| AC16 | Acheteur confirme la réception puis administrateur verse | Net producteur 1 649 MAD dans l'exemple ; commande clôturée |
 | AC17 | Acheteur ne répond pas à la remise | Commande en attente ; relance possible ; aucune clôture automatique |
 | AC18 | Litige ouvert avant confirmation conforme | Versement bloqué ; dossier et preuves visibles aux parties autorisées |
-| AC19 | Remboursement total exécuté | Paiement remboursé, aucun versement agriculteur, commande clôturée |
+| AC19 | Remboursement total exécuté | Paiement remboursé, aucun versement producteur, commande clôturée |
 | AC20 | Accord partiel exécuté | Remboursement, commission, net et transport se réconcilient ; clôture après versement si dû |
 | AC21 | Remplacement puis réception conforme | Nouveau cycle visible, premier historique conservé, aucun second paiement acheteur, versement ensuite |
 | AC22 | Rôle ou propriétaire incorrect pour une action | Écran protégé et réponse 403 ; données inchangées |
@@ -772,13 +782,13 @@ La démonstration doit tenir dans un segment court de l'oral global. La durée i
 ### Séquence principale : environ 5 à 7 minutes
 
 1. Montrer le catalogue et l'identité visuelle.
-2. En agriculteur, publier ou modifier une offre de tomates.
+2. En producteur, publier ou modifier une offre de tomates.
 3. Passer acheteur, retrouver l'offre et commander directement.
 4. Vérifier le total, choisir Naps et simuler le paiement réussi.
 5. Passer administrateur, planifier puis faire avancer la livraison.
 6. Passer acheteur, consulter les notifications et confirmer la réception conforme.
 7. Passer administrateur, effectuer le versement.
-8. Passer agriculteur, montrer le règlement et l'historique clôturé.
+8. Passer producteur, montrer le règlement et l'historique clôturé.
 
 ### Séquences complémentaires préchargées
 

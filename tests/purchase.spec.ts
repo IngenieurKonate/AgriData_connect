@@ -52,7 +52,7 @@ test('achat Naps refusé puis réussi, livraison, réception et versement', asyn
   const snapshot = await page.evaluate(() => JSON.parse(localStorage.getItem('agridataconnect.demo.v1')!));
   expect(snapshot.stockMovements.filter((entry: { orderId: string }) => entry.orderId === id)).toHaveLength(1);
   expect(snapshot.payouts.filter((entry: { orderId: string }) => entry.orderId === id)).toHaveLength(1);
-  expect(snapshot.payouts.find((entry: { orderId: string }) => entry.orderId === id).netCents).toBe(163200);
+  expect(snapshot.payouts.find((entry: { orderId: string }) => entry.orderId === id).netCents).toBe(164900);
   expect(errors).toEqual([]);
 });
 

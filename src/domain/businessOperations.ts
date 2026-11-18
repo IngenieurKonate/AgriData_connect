@@ -202,7 +202,7 @@ export function createProposal(data: BusinessData, user: UserRecord | null, conv
   const offer = offerOf(data, input.offerId);
   if (conversation.offerId && offer.id !== conversation.offerId) fail(409, 'INVALID_PROPOSAL', 'La proposition doit concerner le lot de cette conversation.');
   if (!data.users.some(item => item.id === conversation.buyerId && item.status === 'active') || !data.users.some(item => item.id === conversation.sellerId && item.status === 'active')) fail(403, 'FORBIDDEN', 'Un participant ne peut pas conclure de nouvel accord.');
-  if (offer.sellerId !== conversation.sellerId || offer.status !== 'published') fail(403, 'FORBIDDEN', 'La proposition doit utiliser une offre active de cet agriculteur.');
+  if (offer.sellerId !== conversation.sellerId || offer.status !== 'published') fail(403, 'FORBIDDEN', 'La proposition doit utiliser une offre active de ce producteur.');
   if (!positive(input.quantityKg) || input.quantityKg < offer.minimumOrderKg || input.quantityKg > availableStock(data, offer.id) || !positive(input.pricePerKgCents)) fail(409, 'INSUFFICIENT_STOCK', 'La quantité ou le prix de la proposition est invalide.');
   const request = conversation.requestId ? data.purchaseRequests.find(item => item.id === conversation.requestId) : undefined;
   if (conversation.requestId && (!request || request.status !== 'open' || request.orderId || request.product !== offer.product || input.quantityKg > request.quantityKg)) fail(409, 'REQUEST_UNAVAILABLE', 'La proposition ne correspond plus à la demande.');

@@ -25,7 +25,7 @@ Dire à l’oral que les acteurs, paiements, e-mails et transports sont simulés
 | 1:25 à 2:05 | Paiement Naps | Préparer, déclarer un refus, préparer à nouveau puis valider. Une seule commande et une seule vente de stock ; le refus conserve l’historique. |
 | 2:05 à 3:10 | Administration, même commande | Planifier avec un transporteur, une collecte et une arrivée cohérentes. Avancer collecte, livraison et remise. La remise du transporteur laisse le versement bloqué. |
 | 3:10 à 3:40 | Restaurant Jardin, même commande | Montrer la chronologie partagée puis confirmer la réception conforme. |
-| 3:40 à 4:20 | Administration puis Coopérative Atlas | Verser 1 632 MAD au producteur : 1 700 MAD moins 68 MAD de commission. La commande est clôturée ; le règlement apparaît chez le producteur. |
+| 3:40 à 4:20 | Administration puis Coopérative Atlas | Verser 1 649 MAD au producteur : 1 700 MAD moins 51 MAD de commission. La commande est clôturée ; le règlement apparaît chez le producteur. |
 | 4:20 à 5:25 | Administration, `/admin/litiges/dispute-delivery` | Ouvrir le dossier de la commande distincte déjà livrée. Prendre en charge, choisir le remboursement total et motiver. Enregistrer la décision : aucun argent ne bouge encore. Exécuter puis confirmer : 990 MAD remboursés, aucun versement et clôture. |
 | 5:25 à 6:00 | `/admin/paiements` puis `/admin` | Montrer remboursement, commissions et montants dus calculés. Recharger une commande pour prouver la persistance. Expliquer que les suspensions empêchent de nouvelles transactions tout en préservant le suivi des commandes existantes. |
 
@@ -37,7 +37,7 @@ Pour tenir cinq minutes, ne montrer que le paiement réussi et décrire le refus
 
 **Négociation.** Restaurant Jardin ouvre `/messages/conversation-offer` et fait une contre-proposition de 600 kg à 3,10 MAD/kg. Coopérative Atlas accepte. Restaurant Jardin prépare une nouvelle commande : produits 1 860 MAD, livraison 300 MAD, total 2 160 MAD. L’acceptation seule n’avait réservé aucun stock. Cette commande reste distincte du parcours principal.
 
-**Litige partiel.** Après une nouvelle réinitialisation, Administration ouvre `dispute-delivery`. Prendre en charge, choisir l’accord financier partiel, saisir 100 MAD de produits et 50 MAD de transport remboursés, motiver, enregistrer puis exécuter. La commande reste ouverte. Vérifier : 990 MAD payés = 150 remboursés + 662,40 nets producteur + 27,60 de commission + 150 de transport conservé. Effectuer le versement pour clôturer.
+**Litige partiel.** Après une nouvelle réinitialisation, Administration ouvre `dispute-delivery`. Prendre en charge, choisir l’accord financier partiel, saisir 100 MAD de produits et 50 MAD de transport remboursés, motiver, enregistrer puis exécuter. La commande reste ouverte. Vérifier : 990 MAD payés = 150 remboursés + 669,30 nets producteur + 20,70 de commission + 150 de transport conservé. Effectuer le versement pour clôturer.
 
 **Remplacement.** Après réinitialisation, traiter le même dossier avec 100 kg du même lot. Exécuter une fois : stock diminué de 100 kg et cycle 2 visible. Planifier et avancer ce cycle jusqu’à la remise. Restaurant Jardin confirme, puis Administration verse 758,40 MAD. Le premier cycle est conservé et aucun nouveau paiement acheteur n’a été créé.
 
