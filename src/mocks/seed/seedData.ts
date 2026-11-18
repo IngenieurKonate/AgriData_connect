@@ -29,13 +29,13 @@ export function createInitialData(anchor = Date.now()): BusinessData {
   const buyerTwo = 'buyer-private';
   const offers = [
     ['offer-tomato-round-m', farmerOne, 'Tomates rondes, calibre M', 'Tomates rondes récoltées dans la région d’Agadir.', 'M · 57-67 mm', 340, 4000, 250, 'Agadir', 'tomato'],
-    ['offer-tomato-elongated-l', farmerTwo, 'Tomates allongées, calibre L', 'Lot de tomates allongées triées.', 'L · 67-82 mm', 395, 3200, 300, 'Meknès', 'tomato'],
+    ['offer-tomato-elongated-l', farmerTwo, 'Tomates allongées, calibre L', 'Lot de tomates allongées triées.', 'L · 67-82 mm', 395, 3200, 300, 'Tanger', 'tomato'],
     ['offer-tomato-cherry', farmerOne, 'Tomates cerises', 'Tomates cerises en caisses.', 'Non précisé', 1180, 1000, 100, 'Agadir', 'tomato'],
-    ['offer-tomato-greenhouse', farmerTwo, 'Tomates de serre', 'Tomates récoltées et triées à la ferme.', 'M · 57-67 mm', 375, 0, 100, 'Meknès', 'tomato'],
-    ['offer-tomato-disabled', farmerTwo, 'Tomates rondes, grand calibre', 'Annonce indisponible aux nouvelles commandes.', 'XL · plus de 82 mm', 410, 1500, 250, 'Meknès', 'tomato'],
-    ['offer-onion-yellow', farmerTwo, 'Oignons jaunes, calibre 50-70', 'Oignons jaunes conditionnés en filets.', '50-70 mm', 215, 7000, 500, 'Meknès', 'onion'],
+    ['offer-tomato-greenhouse', farmerTwo, 'Tomates de serre', 'Tomates récoltées et triées à la ferme.', 'M · 57-67 mm', 375, 0, 100, 'Tanger', 'tomato'],
+    ['offer-tomato-disabled', farmerTwo, 'Tomates rondes, grand calibre', 'Annonce indisponible aux nouvelles commandes.', 'XL · plus de 82 mm', 410, 1500, 250, 'Tanger', 'tomato'],
+    ['offer-onion-yellow', farmerTwo, 'Oignons jaunes, calibre 50-70', 'Oignons jaunes conditionnés en filets.', '50-70 mm', 215, 7000, 500, 'Tanger', 'onion'],
     ['offer-onion-red', farmerOne, 'Oignons rouges', 'Oignons rouges triés, prêts à enlever.', '60-80 mm', 290, 5000, 300, 'Agadir', 'onion'],
-    ['offer-onion-white', farmerTwo, 'Oignons blancs', 'Oignons blancs de calibre régulier.', '45-65 mm', 260, 2600, 300, 'Meknès', 'onion'],
+    ['offer-onion-white', farmerTwo, 'Oignons blancs', 'Oignons blancs de calibre régulier.', '45-65 mm', 260, 2600, 300, 'Tanger', 'onion'],
   ].map(([id_, sellerId, title, description, grade, pricePerKgCents, stockRemainingKg, minimumOrderKg, city, product]) => ({
     id: id_ as string, sellerId: sellerId as string, product: product as Product, title: title as string,
     description: description as string, grade: grade as string, pricePerKgCents: pricePerKgCents as number,
@@ -82,7 +82,7 @@ export function createInitialData(anchor = Date.now()): BusinessData {
       buyerAddress: { city: user('buyer', buyerId).city, address: user('buyer', buyerId).address },
       sellerAddress: { city: offer.city, address: offer.collectionAddress },
       quantityKg, goodsCents, deliveryCents, totalCents: goodsCents + deliveryCents,
-      pricing: { deliveryBaseCents: 15000, deliveryPerKgCents: 25, commissionRateBps: 400 }, commissionRateBps: 400,
+      pricing: { deliveryBaseCents: 15000, deliveryPerKgCents: 25, commissionRateBps: 300 }, commissionRateBps: 300,
       status: status as OrderStatus, paymentStatus: paymentStatus as PaymentStatus,
       currentDeliveryCycleId: deliveryStatus === 'not_started' ? undefined : `cycle-${id_}`,
       disputeId: id_ === 'order-disputed' ? 'dispute-delivery' : undefined,
@@ -151,12 +151,12 @@ export function createInitialData(anchor = Date.now()): BusinessData {
     status: 'open', comments: [{ id: 'comment-dispute-buyer', authorId: buyerOne, authorRole: 'buyer', text: 'J’ai signalé le problème à la réception.', createdAt: time(-1) }], createdAt: orders.find(order => order.id === 'order-disputed')!.createdAt,
   }];
   const payouts: BusinessData['payouts'] = [
-    { id: 'payout-order-closed', orderId: 'order-closed', sellerId: farmerTwo, status: 'paid', netCents: 206400, commissionCents: 8600, reference: 'VIR-2026-0001', idempotencyKey: 'seed-payout-order-closed', paidAt: time(-2) },
-    { id: 'payout-order-disputed', orderId: 'order-disputed', sellerId: farmerTwo, status: 'blocked', netCents: 75840, commissionCents: 3160 },
+    { id: 'payout-order-closed', orderId: 'order-closed', sellerId: farmerTwo, status: 'paid', netCents: 208550, commissionCents: 6450, reference: 'VIR-2026-0001', idempotencyKey: 'seed-payout-order-closed', paidAt: time(-2) },
+    { id: 'payout-order-disputed', orderId: 'order-disputed', sellerId: farmerTwo, status: 'blocked', netCents: 76630, commissionCents: 2370 },
   ];
 
   return {
-    config: { schemaVersion: SCHEMA_VERSION, seedVersion: SEED_VERSION, seedAnchorTime: new Date(anchor).toISOString(), commissionRateBps: 400, deliveryBaseCents: 15000, deliveryPerKgCents: 25 },
+    config: { schemaVersion: SCHEMA_VERSION, seedVersion: SEED_VERSION, seedAnchorTime: new Date(anchor).toISOString(), commissionRateBps: 300, deliveryBaseCents: 15000, deliveryPerKgCents: 25 },
     users: [user('buyer', buyerOne), user('buyer', buyerTwo), user('farmer', farmerOne), user('farmer', farmerTwo), user('admin', adminId)],
     offers, purchaseRequests, conversations, messages, proposals, orders, reservations, stockMovements, paymentAttempts,
     deliveryCycles, events,

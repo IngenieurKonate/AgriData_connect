@@ -34,11 +34,11 @@ Les 29 critères ci-dessous sont validés par la régression complète, les test
 | AC13 | Modification/fermeture de demande : anciens accords invalidés, interlocuteurs notifiés, aucune réutilisation possible. |
 | AC14 | Livraison séquentielle, événements datés, chronologie et notifications conservées chez acheteur et producteur. |
 | AC15 | Remise signalée sans réception conforme : versement absent et action prématurée refusée. |
-| AC16 | Réception acheteur puis versement administratif unique : net 1 632 MAD et clôture. |
+| AC16 | Réception acheteur puis versement administratif unique : net 1 649 MAD et clôture. |
 | AC17 | Relance visible, notification persistante, commande laissée ouverte sans réponse de l’acheteur. |
 | AC18 | Signalement après remise, photo locale et commentaire producteur visibles dans le dossier ; blocage du versement et contrôles d’accès. |
 | AC19 | Décision seule sans remboursement ; exécution totale unique, montant produits + transport, aucun versement, clôture et aucun retour automatique de stock. |
-| AC20 | Remboursement de 150 MAD : 662,40 MAD nets, 27,60 MAD de commission, 150 MAD de transport conservé ; clôture après versement. Cas net nul et montants invalides testés. |
+| AC20 | Remboursement de 150 MAD : 669,30 MAD nets, 20,70 MAD de commission, 150 MAD de transport conservé ; clôture après versement. Cas net nul et montants invalides testés. |
 | AC21 | Cycle 2 créé et stock déduit une seule fois ; cycle 1 intact, aucun nouveau paiement, réception conforme puis versement. Problème du remplacement traité dans le même dossier ; second remplacement interdit. |
 | AC22 | Routes protégées et API 401/403 selon session/rôle/propriétaire, notamment litiges, commentaires, modération et opérations financières. Dépôt inchangé après refus. |
 | AC23 | Rechargements et changements de rôle sur achats, offres, demandes, messages, litiges, remboursements et notifications. Contrôle du JSON persisté et du dépôt rechargé. |

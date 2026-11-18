@@ -51,7 +51,7 @@ describe('Litiges et réconciliation', () => {
   it('réconcilie remboursement partiel, commission, transport et versement unique', () => {
     decide({ resolution: 'partial_refund', refundGoodsCents: 10000, refundDeliveryCents: 5000 }); execute();
     expect(order().status).toBe('active'); expect(order().paymentStatus).toBe('partially_refunded');
-    expect(financialSummary(data, order())).toMatchObject({ paidCents: 99000, refundedCents: 15000, commissionCents: 2760, netCents: 66240, retainedDeliveryCents: 15000, balanced: true });
+    expect(financialSummary(data, order())).toMatchObject({ paidCents: 99000, refundedCents: 15000, commissionCents: 2070, netCents: 66930, retainedDeliveryCents: 15000, balanced: true });
     expect(data.payouts.filter(item => item.orderId === order().id)).toHaveLength(1);
     payout(data, user(), order().id, 'partial-payout-key');
     expect(order().status).toBe('closed'); expect(financialSummary(data, order()).remainingToSellerCents).toBe(0);

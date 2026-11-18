@@ -17,8 +17,8 @@ const plan = (order: OrderRecord) => planDelivery(data, admin(), order.id, { par
 
 describe('Achat direct et invariants', () => {
   it('réconcilie produits, livraison, commission et net en centimes', () => {
-    expect(amounts(data, 500, 340)).toEqual({ goodsCents: 170000, deliveryCents: 27500, totalCents: 197500, commissionCents: 6800, netCents: 163200 });
-    expect(amounts(data, 1, 333).commissionCents).toBe(13);
+    expect(amounts(data, 500, 340)).toEqual({ goodsCents: 170000, deliveryCents: 27500, totalCents: 197500, commissionCents: 5100, netCents: 164900 });
+    expect(amounts(data, 1, 333).commissionCents).toBe(10);
   });
   it.each([0, -1, 1.5, 249, 999999])('refuse une quantité invalide %s sans mutation', quantityKg => {
     const before = structuredClone(data);
@@ -91,7 +91,7 @@ describe('Achat direct et invariants', () => {
     acceptReception(data, buyer(), order.id);
     const accepted = structuredClone(data); acceptReception(data, buyer(), order.id); expect(data).toEqual(accepted);
     const record = payout(data, admin(), order.id, 'final-payout-key');
-    expect(record.netCents).toBe(163200); expect(order.status).toBe('closed');
+    expect(record.netCents).toBe(164900); expect(order.status).toBe('closed');
     const closed = structuredClone(data); payout(data, admin(), order.id, 'final-payout-key'); payout(data, admin(), order.id, 'another-payout-key'); expect(data).toEqual(closed);
     for (const type of ['delivery_collected', 'delivery_in_transit', 'handover_reported']) {
       const event = data.events.find(item => item.orderId === order.id && item.type === type)!;

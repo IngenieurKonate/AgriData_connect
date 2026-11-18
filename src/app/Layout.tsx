@@ -40,7 +40,7 @@ export function Layout() {
     <Link className="wordmark" to="/" aria-label="AgriData Connect, accueil"><img className="brand-logo" src="/brand/logo-compact-inverse.png" alt="AgriData Connect" /></Link>
     <div className="sidebar-label">{profile ? `Espace ${roleLabels[profile.role].toLowerCase()}` : 'Découvrir la plateforme'}</div>
     <nav aria-label="Navigation principale">{items.map(({ to, label, icon: Icon }) => <NavLink key={to} to={to} end={to === '/' || to === '/admin'} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}><Icon size={19} strokeWidth={1.7} aria-hidden="true" /><span>{label}</span></NavLink>)}</nav>
-    <div className="sidebar-bottom"><div className="sidebar-note"><Sprout size={25} strokeWidth={1.4} aria-hidden="true" /><p>De la terre à l'acheteur.<br /><strong>Chaque étape compte.</strong></p><span>Tomates & oignons · Maroc</span></div></div>
+    <div className="sidebar-bottom"><div className="sidebar-note"><Sprout size={25} strokeWidth={1.4} aria-hidden="true" /><p>Vos ventes agricoles, suivies jusqu'à la livraison.</p><span>Tomates & oignons · Maroc</span></div></div>
     <div className="sidebar-footer">AgriData Connect</div>
   </>;
 

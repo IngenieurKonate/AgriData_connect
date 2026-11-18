@@ -1,4 +1,5 @@
 import type { BusinessData } from '../../domain/types';
+import { financialSummary } from '../../domain/finance';
 import { createInitialData, SCHEMA_VERSION } from '../seed/seedData';
 
 export const BUSINESS_STORAGE_KEY = 'agridataconnect.demo.v1';
@@ -48,6 +49,44 @@ export class DemoRepository {
     catch { return this.result(null, 'DATA_CORRUPT', true); }
     if (!isBusinessData(value)) return this.result(null, 'DATA_CORRUPT', true);
     if (value.config.schemaVersion !== SCHEMA_VERSION) return this.result(null, 'SCHEMA_VERSION_MISMATCH', true);
+    let dataUpdated = false;
+    if (value.config.commissionRateBps !== 300) {
+      value.config.commissionRateBps = 300;
+      dataUpdated = true;
+    }
+    for (const order of value.orders) {
+      if (order.commissionRateBps !== 300 || order.pricing.commissionRateBps !== 300) dataUpdated = true;
+      order.commissionRateBps = 300;
+      order.pricing.commissionRateBps = 300;
+    }
+    for (const payout of value.payouts) {
+      const order = value.orders.find(item => item.id === payout.orderId);
+      if (!order) continue;
+      const summary = financialSummary(value, order);
+      if (payout.commissionCents !== summary.commissionCents || payout.netCents !== summary.netCents) dataUpdated = true;
+      payout.commissionCents = summary.commissionCents;
+      payout.netCents = summary.netCents;
+    }
+    const amane = value.users.find(user => user.id === 'farmer-farm');
+    if (amane) {
+      dataUpdated ||= amane.city !== 'Tanger' || amane.address.includes('Meknès');
+      amane.city = 'Tanger';
+      amane.address = amane.address.replace('Meknès', 'Tanger');
+    }
+    for (const offer of value.offers) {
+      if (offer.sellerId !== 'farmer-farm') continue;
+      dataUpdated ||= offer.city !== 'Tanger' || offer.collectionAddress.includes('Meknès');
+      offer.city = 'Tanger';
+      offer.collectionAddress = offer.collectionAddress.replace('Meknès', 'Tanger');
+    }
+    for (const order of value.orders) {
+      if (order.sellerId !== 'farmer-farm') continue;
+      dataUpdated ||= order.sellerAddress.city !== 'Tanger' || order.sellerAddress.address.includes('Meknès');
+      order.sellerAddress.city = 'Tanger';
+      order.sellerAddress.address = order.sellerAddress.address.replace('Meknès', 'Tanger');
+    }
+    try { if (dataUpdated) this.storage.setItem(this.key, JSON.stringify(value)); }
+    catch { /* The updated location remains available for this session. */ }
     this.current = value;
     this.status = null;
     return this.result(value, null, true);

@@ -144,7 +144,7 @@ test('chaque mouvement de stock correspond à une vente et les réservations non
   assert.equal(heldReservation.quantityKg, waitingOrder.quantityKg);
   assert.equal(data.reservations.find(item => item.orderId === 'order-cancelled').status, 'released');
   assert.equal(data.payouts.find(payout => payout.orderId === 'order-disputed').status, 'blocked');
-  assert.equal(data.payouts.find(payout => payout.orderId === 'order-closed').netCents, 206400);
+  assert.equal(data.payouts.find(payout => payout.orderId === 'order-closed').netCents, 208550);
 });
 
 test('les références, dates et étapes de livraison du jeu initial sont cohérentes', () => {
@@ -180,6 +180,29 @@ test('le dépôt initialise une seule graine et conserve les mises à jour au re
   const reloaded = new DemoRepository(storage).load();
   assert.equal(reloaded.data.users.find(user => user.id === 'farmer-coop').city, 'Biougra');
   assert.equal(reloaded.data.offers.length, 8);
+});
+
+test('le dépôt migre les anciennes commissions à 3 % et conserve les montants réconciliés', () => {
+  const legacyData = createInitialData(Date.UTC(2026, 10, 10, 12));
+  legacyData.config.commissionRateBps = 400;
+  for (const order of legacyData.orders) {
+    order.commissionRateBps = 400;
+    order.pricing.commissionRateBps = 400;
+  }
+  const closedPayout = legacyData.payouts.find(payout => payout.orderId === 'order-closed');
+  closedPayout.commissionCents = 8600;
+  closedPayout.netCents = 206400;
+  const farmOffer = legacyData.offers.find(offer => offer.sellerId === 'farmer-farm');
+  farmOffer.city = 'Meknès';
+  farmOffer.collectionAddress = 'Lieu de collecte, Meknès';
+  const storage = memoryStorage({ [BUSINESS_STORAGE_KEY]: JSON.stringify(legacyData) });
+
+  const migrated = new DemoRepository(storage).load().data;
+  assert.equal(migrated.config.commissionRateBps, 300);
+  assert.ok(migrated.orders.every(order => order.commissionRateBps === 300 && order.pricing.commissionRateBps === 300));
+  assert.deepEqual(migrated.payouts.find(payout => payout.orderId === 'order-closed'), { ...closedPayout, commissionCents: 6450, netCents: 208550 });
+  assert.equal(migrated.offers.find(offer => offer.sellerId === 'farmer-farm').city, 'Tanger');
+  assert.equal(JSON.parse(storage.getItem(BUSINESS_STORAGE_KEY)).config.commissionRateBps, 300);
 });
 
 test('une erreur d’écriture ne publie pas de mutation en mémoire', () => {
