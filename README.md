@@ -1,6 +1,9 @@
 # AgriData Connect
+**Voir la vidéo de présentation**
 
-[![Voir la vidéo de présentation complète d’AgriData Connect](Aseets/miniature.png)](https://www.youtube.com/watch?v=gnwLyldnhD4)
+<a href="https://www.youtube.com/watch?v=gnwLyldnhD4">
+  <img src="Aseets/miniature.png" alt="Voir la vidéo de présentation complète d’AgriData Connect" width="480">
+</a>
 
 ## Le projet en bref
 
